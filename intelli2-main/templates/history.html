@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IntelliBreak | History</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="main-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-logo">IntelliBreak</div>
+
+        <div class="sidebar-menu">
+          <a href="/dashboard" class="sidebar-link"> Dashboard </a>
+
+          <a href="/history" class="sidebar-link active"> History </a>
+
+          <a href="/analytics" class="sidebar-link"> Analytics </a>
+
+          <a href="#" class="sidebar-link"> Profile </a>
+
+          <a href="#" class="sidebar-link"> Settings </a>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="dashboard-container">
+          <header class="header">
+            <h1>Session History</h1>
+
+            <a href="/dashboard" class="btn btn-primary"> Back to Dashboard </a>
+          </header>
+
+          <!-- Search -->
+
+          <div class="glass-panel panel">
+            <div class="input-group">
+              <label>Search Activity</label>
+
+              <input type="text" placeholder="Search by activity..." />
+            </div>
+          </div>
+
+          <!-- History Table -->
+
+          <div class="glass-panel panel" style="margin-top: 30px">
+            <div class="glass-panel panel" style="margin-top: 30px">
+              <h2 style="margin-bottom: 20px">Session Records</h2>
+
+              <table class="analytics-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Activity</th>
+                    <th>Duration</th>
+                    <th>Breaks</th>
+                    <th>Productivity</th>
+                    <th>Recommendation</th>
+                  </tr>
+                </thead>
+
+                <tbody id="historyTableBody"></tbody>
+              </table>
+            </div>
+
+            <script>
+              async function loadHistory() {
+                const response = await fetch("/api/sessions/history");
+
+                const data = await response.json();
+
+                const tbody = document.getElementById("historyTableBody");
+
+                tbody.innerHTML = "";
+
+                data.sessions.forEach((session) => {
+                  let badgeClass = "badge-medium";
+
+                  if (session.best_prediction === "High")
+                    badgeClass = "badge-high";
+
+                  if (session.best_prediction === "Low")
+                    badgeClass = "badge-low";
+
+                  tbody.innerHTML += `
+
+            <tr>
+
+                <td>
+                    ${session.created_at}
+                </td>
+
+                <td>
+                    ${session.activity_type}
+                </td>
+
+                <td>
+                    ${session.total_duration_minutes ?? 0}
+                    mins
+                </td>
+
+                <td>
+                    ${session.break_count}
+                </td>
+
+                <td>
+                    <span class="badge ${badgeClass}">
+                        ${session.best_prediction ?? "Active"}
+                    </span>
+                </td>
+
+                <td>
+                    ${session.recommendation ?? "Session still active"}
+                </td>
+
+            </tr>
+
+        `;
+                });
+              }
+
+              loadHistory();
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

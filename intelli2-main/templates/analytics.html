@@ -1,0 +1,276 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IntelliBreak | Analytics</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="main-layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-logo">IntelliBreak</div>
+
+        <div class="sidebar-menu">
+          <a href="/dashboard" class="sidebar-link active">Dashboard</a>
+
+          <a href="/history" class="sidebar-link">History</a>
+
+          <a href="/analytics" class="sidebar-link">Analytics</a>
+
+          <a href="#" class="sidebar-link">Profile</a>
+
+          <a href="#" class="sidebar-link">Settings</a>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <div class="main-content">
+        <div class="analytics-container">
+          <header class="header">
+            <h1>Analytics Dashboard</h1>
+
+            <a href="/dashboard" class="btn btn-primary"> Back to Dashboard </a>
+          </header>
+
+          <!-- SUMMARY CARDS -->
+
+          <div class="grid grid-cols-3">
+            <div class="stat-card glass-panel">
+              <div class="stat-label">Total Sessions</div>
+
+              <div id="totalSessions" class="stat-value">0</div>
+            </div>
+
+            <div class="stat-card glass-panel">
+              <div class="stat-label">Average Focus Time</div>
+
+              <div id="avgFocusTime" class="stat-value">0m</div>
+            </div>
+
+            <div class="stat-card glass-panel">
+              <div class="stat-label">Average Productivity</div>
+
+              <div id="avgProductivity" class="stat-value">-</div>
+            </div>
+
+            <div class="stat-card glass-panel">
+              <div class="stat-label">Total Breaks</div>
+
+              <div id="totalBreaks" class="stat-value">0</div>
+            </div>
+
+            <div class="stat-card glass-panel">
+              <div class="stat-label">Most Common Activity</div>
+
+              <div id="mostActivity" class="stat-value">-</div>
+            </div>
+
+            <div class="stat-card glass-panel">
+              <div class="stat-label">High Productivity Sessions</div>
+
+              <div id="highSessions" class="stat-value">0</div>
+            </div>
+          </div>
+
+          <!-- PRODUCTIVITY TREND -->
+
+          <div class="glass-panel panel" style="margin-top: 30px">
+            <h2>Productivity Summary</h2>
+
+            <table class="analytics-table">
+              <thead>
+                <tr>
+                  <th>Level</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+
+              <tbody id="productivityTableBody"></tbody>
+            </table>
+          </div>
+
+          <!-- ACTIVITY DISTRIBUTION -->
+
+          <div class="glass-panel panel" style="margin-top: 30px">
+            <h2>Activity Distribution</h2>
+
+            <table class="analytics-table">
+              <thead>
+                <tr>
+                  <th>Activity</th>
+                  <th>Sessions</th>
+                </tr>
+              </thead>
+
+              <tbody id="activityTableBody"></tbody>
+            </table>
+          </div>
+
+          <!-- MACHINE LEARNING PERFORMANCE -->
+
+          <div class="glass-panel panel" style="margin-top: 30px">
+            <h2>Machine Learning Performance</h2>
+
+            <table class="analytics-table">
+              <thead>
+                <tr>
+                  <th>Algorithm</th>
+                  <th>Accuracy</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody id="mlTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      async function loadAnalytics() {
+        console.log("Analytics started");
+
+        try {
+          const response = await fetch("/api/sessions/history");
+
+          console.log("Response:", response);
+
+          const data = await response.json();
+
+          console.log("Data:", data);
+
+          const sessions = data.sessions || [];
+
+          console.log("Sessions:", sessions);
+
+          document.getElementById("totalSessions").textContent =
+            sessions.length;
+
+          let totalFocus = 0;
+          let totalBreaks = 0;
+
+          let high = 0;
+          let medium = 0;
+          let low = 0;
+
+          let activities = {};
+
+          sessions.forEach((session) => {
+            totalFocus += session.focus_time_minutes || 0;
+
+            totalBreaks += session.break_count || 0;
+
+            const activity = session.activity_type || "Unknown";
+
+            activities[activity] = (activities[activity] || 0) + 1;
+
+            if (session.best_prediction === "High") high++;
+
+            if (session.best_prediction === "Medium") medium++;
+
+            if (session.best_prediction === "Low") low++;
+          });
+
+          const avgFocus =
+            sessions.length > 0 ? (totalFocus / sessions.length).toFixed(1) : 0;
+
+          document.getElementById("avgFocusTime").textContent = avgFocus + "m";
+
+          document.getElementById("totalBreaks").textContent = totalBreaks;
+
+          document.getElementById("highSessions").textContent = high;
+
+          let productivity = "Unknown";
+
+          if (high >= medium && high >= low) productivity = "High";
+          else if (medium >= high && medium >= low) productivity = "Medium";
+          else productivity = "Low";
+
+          document.getElementById("avgProductivity").textContent = productivity;
+
+          let mostActivity = "-";
+          let maxCount = 0;
+
+          for (const activity in activities) {
+            if (activities[activity] > maxCount) {
+              maxCount = activities[activity];
+              mostActivity = activity;
+            }
+          }
+
+          document.getElementById("mostActivity").textContent = mostActivity;
+
+          document.getElementById("productivityTableBody").innerHTML = `
+
+        <tr>
+            <td>High</td>
+            <td>${high}</td>
+        </tr>
+
+        <tr>
+            <td>Medium</td>
+            <td>${medium}</td>
+        </tr>
+
+        <tr>
+            <td>Low</td>
+            <td>${low}</td>
+        </tr>
+
+    `;
+
+          let activityRows = "";
+
+          for (const activity in activities) {
+            activityRows += `
+            <tr>
+                <td>${activity}</td>
+                <td>${activities[activity]}</td>
+            </tr>
+        `;
+          }
+
+          document.getElementById("activityTableBody").innerHTML = activityRows;
+
+          document.getElementById("mlTableBody").innerHTML = `
+
+        <tr>
+            <td>Random Forest</td>
+            <td>99.75%</td>
+            <td>Selected</td>
+        </tr>
+
+        <tr>
+            <td>Decision Tree</td>
+            <td>100%</td>
+            <td>Alternative</td>
+        </tr>
+
+        <tr>
+            <td>KNN</td>
+            <td>92.5%</td>
+            <td>Baseline</td>
+        </tr>
+
+    `;
+        } catch (error) {
+          console.error("Analytics Error:", error);
+        }
+      }
+
+      loadAnalytics();
+    </script>
+  </body>
+</html>
