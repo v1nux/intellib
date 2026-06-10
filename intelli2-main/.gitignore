@@ -1,0 +1,7 @@
+intelli2-main/__pycache__/
+Include/
+Lib/
+Scripts/
+
+pyvenv.cfg
+venv/

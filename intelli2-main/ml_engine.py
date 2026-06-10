@@ -31,7 +31,7 @@ FEATURE_COLUMNS = [
 TARGET_COLUMN = "productivity_label"
 
 RANDOM_STATE = 42
-TEST_SIZE = 0.4
+TEST_SIZE = 0.2
 
 # =========================================
 # Module-level state (loaded once on import)

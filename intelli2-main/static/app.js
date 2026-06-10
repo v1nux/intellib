@@ -27,11 +27,10 @@ document.addEventListener("click", () => {
 setInterval(() => {
   const inactiveMinutes = (Date.now() - lastActivityTime) / 1000 / 60;
 
-  if (inactiveMinutes >= 0.1) {
-    // Set to 15 for production, using 0.1 for demo purposes
+  if (inactiveMinutes >= 15) {
     askBreakConfirmation();
   }
-}, 1000); // Check every second for demo purposes (set to 60000 for 1 minute in production)
+}, 60000); // Check every minute
 
 let inactivityPopupShown = false;
 

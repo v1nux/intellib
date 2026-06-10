@@ -66,6 +66,11 @@ def login_page():
     return render_template("login.html")
 
 
+@app.route("/register")
+def register_page():
+    return render_template("register.html")
+
+
 @app.route("/dashboard")
 def dashboard_page():
     if "user_id" not in session:
@@ -80,13 +85,21 @@ def dashboard_page():
 def analytics():
     if "user_id" not in session:
         return redirect(url_for("login_page"))
-    return render_template("analytics.html")
+    response = make_response(render_template("analytics.html"))
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "-1"
+    return response
 
 @app.route("/history")
 def history():
     if "user_id" not in session:
         return redirect(url_for("login_page"))
-    return render_template("history.html")
+    response = make_response(render_template("history.html"))
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "-1"
+    return response
 
 # =========================================
 # Auth API Routes
@@ -162,7 +175,9 @@ def login():
 def logout():
     """Logout current user."""
     session.clear()
-    return jsonify({"message": "Logged out successfully"})
+    response = jsonify({"message": "Logged out successfully"})
+    response.set_cookie('session', '', expires=0)
+    return response
 
 
 @app.route("/api/auth/me", methods=["GET"])

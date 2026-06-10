@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,171 +8,171 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
-<div class="main-layout">
+    <div class="main-layout">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
 
-        <div class="sidebar-logo">
-            IntelliBreak
-        </div>
-
-        <div class="sidebar-menu">
-
-           <a href="/dashboard" class="sidebar-link active">Dashboard</a>
-
-            <a href="/history" class="sidebar-link">History</a>
-
-            <a href="/analytics" class="sidebar-link">Analytics</a>
-
-            <a href="#" class="sidebar-link">Profile</a>
-
-            <a href="#" class="sidebar-link">Settings</a>
-
-        </div>
-
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-
-        <div class="dashboard-container">
-        <!-- Header -->
-        <header class="header">
-            <h1>IntelliBreak Dashboard</h1>
-            <div class="user-info">
-                <span id="userGreeting" style="font-weight: 500;">Hello, User</span>
-                <button id="logoutBtn" class="btn btn-danger">Logout</button>
+            <div class="sidebar-logo">
+                IntelliBreak
             </div>
-        </header>
 
-        <!-- Setup Panel (Visible when no session is active) -->
-        <div id="setupPanel" class="glass-panel panel" style="max-width: 600px; margin: 0 auto;">
-            <div class="panel-header">
-                <h2>Start a Focus Session</h2>
-            </div>
-            <form id="startForm">
-                <div class="input-group">
+            <div class="sidebar-menu">
 
-                <label for="activityType">
-                    Activity Type
-                </label>
+                <a href="/dashboard" class="sidebar-link active">Dashboard</a>
 
-                <!-- Custom Text Input -->
-                <input
-                    type="text"
-                    id="activityType"
-                    placeholder="Type activity or choose below..."
-                >
+                <a href="/history" class="sidebar-link">History</a>
 
-                <br><br>
+                <a href="/analytics" class="sidebar-link">Analytics</a>
 
-                <!-- Optional Dropdown -->
-                <select id="activityPreset">
+                <a href="#" class="sidebar-link">Profile</a>
 
-                    <option value="">
-                        Select Suggested Activity (Optional)
-                    </option>
-
-                    <option value="Programming">
-                        Programming
-                    </option>
-
-                    <option value="Research">
-                        Research
-                    </option>
-
-                    <option value="Writing">
-                        Writing
-                    </option>
-
-                    <option value="Reading">
-                        Reading
-                    </option>
-
-                    <option value="Academic Work">
-                        Academic Work
-                    </option>
-
-                    <option value="Project Development">
-                        Project Development
-                    </option>
-
-                    <option value="Design">
-                        Design
-                    </option>
-
-                </select>
+                <a href="#" class="sidebar-link">Settings</a>
 
             </div>
-                <div class="input-group">
-                    <label for="targetDuration">Target Duration (Minutes)</label>
-                    <input type="number" id="targetDuration" min="1" value="60" required>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">Start Session</button>
-            </form>
-        </div>
 
-        <!-- Active Session Panel (Visible when session is running) -->
-        <div id="activePanel" class="hidden">
-            <div class="grid grid-cols-3">
-                
-                <!-- Main Timer & Control Area -->
-                <div class="col-span-2 glass-panel panel" style="text-align: center;">
-                    <h2 id="sessionStatus" style="color: var(--secondary);">Status: ACTIVE FOCUS</h2>
-                    
-                    <div id="timerDisplay" class="timer-display">
-                        00:00:00
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <div class="dashboard-container">
+                <!-- Header -->
+                <header class="header">
+                    <h1>IntelliBreak Dashboard</h1>
+                    <div class="user-info">
+                        <span id="userGreeting" style="font-weight: 500;">Hello, User</span>
+                        <button id="logoutBtn" class="btn btn-danger">Logout</button>
                     </div>
-                    
-                    <div class="session-controls" style="justify-content: center; max-width: 400px; margin: 0 auto;">
-                        <button id="breakBtn" class="btn btn-success btn-block">Take a Break</button>
-                        <button id="endBtn" class="btn btn-danger btn-block">End Session</button>
+                </header>
+
+                <!-- Setup Panel (Visible when no session is active) -->
+                <div id="setupPanel" class="glass-panel panel" style="max-width: 600px; margin: 0 auto;">
+                    <div class="panel-header">
+                        <h2>Start a Focus Session</h2>
                     </div>
+                    <form id="startForm">
+                        <div class="input-group">
 
+                            <label for="activityType">
+                                Activity Type
+                            </label>
 
+                            <!-- Custom Text Input -->
+                            <input type="text" id="activityType" placeholder="Type activity or choose below...">
+
+                            <br><br>
+
+                            <!-- Optional Dropdown -->
+                            <select id="activityPreset">
+
+                                <option value="">
+                                    Select Suggested Activity (Optional)
+                                </option>
+
+                                <option value="Programming">
+                                    Programming
+                                </option>
+
+                                <option value="Research">
+                                    Research
+                                </option>
+
+                                <option value="Writing">
+                                    Writing
+                                </option>
+
+                                <option value="Reading">
+                                    Reading
+                                </option>
+
+                                <option value="Academic Work">
+                                    Academic Work
+                                </option>
+
+                                <option value="Project Development">
+                                    Project Development
+                                </option>
+
+                                <option value="Design">
+                                    Design
+                                </option>
+
+                            </select>
+
+                        </div>
+                        <div class="input-group">
+                            <label for="targetDuration">Target Duration (Minutes)</label>
+                            <input type="number" id="targetDuration" min="1" value="60" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">Start
+                            Session</button>
+                    </form>
                 </div>
 
-                <!-- Live ML Stats -->
-                <div class="glass-panel panel">
-                    <h3 style="margin-bottom: 1.5rem;">Live Prediction Analytics</h3>
-                    
-                    <div class="grid" style="grid-template-columns: 1fr;">
-                        <div class="stat-card glass-panel">
-                            <div class="stat-label">Predicted Productivity</div>
-                            <div id="currentPrediction" class="stat-value" style="font-size: 2rem;">-</div>
-                        </div>
+                <!-- Active Session Panel (Visible when session is running) -->
+                <div id="activePanel" class="hidden">
+                    <div class="grid grid-cols-3">
 
-                        <div class="stat-card glass-panel">
-                            <div class="stat-label">Focus Score</div>
-                            <div id="focusScore" class="stat-value" style="font-size: 2rem;">0</div>
-                        </div>
-                        
-                        <div class="stat-card glass-panel">
-                            <div class="stat-label">Breaks Taken</div>
-                            <div id="breakCount" class="stat-value" style="font-size: 2rem;">0</div>
-                        </div>
-                        
-                        <div style="margin-top: 1rem;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                <span class="stat-label">Burnout Risk:</span>
-                                <span id="burnoutRisk" style="font-weight: 600; color: var(--warning);">Unknown</span>
+                        <!-- Main Timer & Control Area -->
+                        <div class="col-span-2 glass-panel panel" style="text-align: center;">
+                            <h2 id="sessionStatus" style="color: var(--secondary);">Status: ACTIVE FOCUS</h2>
+
+                            <div id="timerDisplay" class="timer-display">
+                                00:00:00
                             </div>
-                            <div style="display: flex; justify-content: space-between;">
+
+                            <div class="session-controls"
+                                style="justify-content: center; max-width: 400px; margin: 0 auto;">
+                                <button id="breakBtn" class="btn btn-success btn-block">Take a Break</button>
+                                <button id="endBtn" class="btn btn-danger btn-block">End Session</button>
+                            </div>
+
+
+                        </div>
+
+                        <!-- Live ML Stats -->
+                        <div class="glass-panel panel">
+                            <h3 style="margin-bottom: 1.5rem;">Live Prediction Analytics</h3>
+
+                            <div class="grid" style="grid-template-columns: 1fr;">
+                                <div class="stat-card glass-panel">
+                                    <div class="stat-label">Predicted Productivity</div>
+                                    <div id="currentPrediction" class="stat-value" style="font-size: 2rem;">-</div>
+                                </div>
+
+                                <div class="stat-card glass-panel">
+                                    <div class="stat-label">Focus Score</div>
+                                    <div id="focusScore" class="stat-value" style="font-size: 2rem;">0</div>
+                                </div>
+
+                                <div class="stat-card glass-panel">
+                                    <div class="stat-label">Breaks Taken</div>
+                                    <div id="breakCount" class="stat-value" style="font-size: 2rem;">0</div>
+                                </div>
+
+                                <div style="margin-top: 1rem;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span class="stat-label">Burnout Risk:</span>
+                                        <span id="burnoutRisk"
+                                            style="font-weight: 600; color: var(--warning);">Unknown</span>
+                                    </div>
+                                    <!-- <div style="display: flex; justify-content: space-between;">
                                 <span class="stat-label">WLB Status:</span>
                                 <span id="wlbStatus" style="font-weight: 600;">Unknown</span>
+                            </div> -->
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
-
             </div>
-        </div>
-    </div>
     </div>
 
-        </div>
+    </div>
 
     </main>
 
@@ -182,18 +183,19 @@
     <script src="{{ url_for('static', filename='app.js') }}"></script>
     <script>
 
-    document
-    .getElementById("activityPreset")
-    .addEventListener("change", function () {
+        document
+            .getElementById("activityPreset")
+            .addEventListener("change", function () {
 
-        if (this.value !== "") {
+                if (this.value !== "") {
 
-            document.getElementById("activityType").value = this.value;
+                    document.getElementById("activityType").value = this.value;
 
-        }
+                }
 
-    });
+            });
 
-</script>
+    </script>
 </body>
+
 </html>
